@@ -1,27 +1,46 @@
-# Zenitsu Thunder Awakening ⚡
+# Zenitsu Masterclass: Interactive Cinematic Experience ⚡
 
-An interactive, front-end web experience paying homage to Zenitsu Agatsuma from *Demon Slayer (Kimetsu no Yaiba)*.
+An interactive, high-performance web experience showcasing Zenitsu Agatsuma's iconic "Thunderclap and Flash" technique from Demon Slayer. 
 
-This project features a dynamic, interactive "wipe" effect that allows users to seamlessly transition Zenitsu between his two states: his energetic waking form and his devastating "Thunderclap and Flash" sleeping form.
+Built as a technical masterclass in modern web graphics, this project blends 2D canvas procedural generation, 3D particle physics, and hardware-accelerated CSS animations to create a seamless, cinematic user experience.
 
-## Features
-- **Interactive Split-Screen Wipe**: Drag your mouse or finger across the screen to control a glowing slash that reveals Zenitsu's hidden power.
-- **Procedural Canvas Lightning**: Custom HTML5 `<canvas>` algorithm that generates randomized, crackling lightning strikes. The intensity of the lightning dynamically scales based on how much of the "Thunderclap" state is revealed!
-- **Dynamic Asset Blending**: Utilizes true transparent PNGs over a dark, parallax-enabled Japanese forest background.
-- **Lore UI**: An animated details panel that slides in when Zenitsu reaches his maximum power threshold.
+## ✨ Features
 
-## Tech Stack
-- **HTML5** & **Vanilla CSS3** (Flexbox, CSS Transitions, Clip-Path)
-- **Vanilla JavaScript** (Mouse/Touch Event Listeners, HTML5 Canvas API)
+- **Interactive Drag Reveal**: Smooth GSAP-powered masking transitions between Zenitsu's "Awake" (coward) and "Asleep" (Thunderclap) states.
+- **3D Particle System**: Uses Three.js and custom buffer geometries to render ambient forest dust that dynamically shifts into violently rising fire embers based on the user's interaction state.
+- **Procedural Canvas Lightning**: A high-performance 2D Canvas rendering loop that generates organic, branching lightning strikes without relying on heavy SVG or DOM elements.
+- **Micro-Interactions**: Features a custom GSAP-driven preloader and a dynamic glowing cursor trailing system that replaces the default mouse pointer.
+- **Glassmorphism UI**: Beautiful, frosted-glass lore panels that conditionally render based on the viewport and interaction state.
+- **Hardware Acceleration**: Utilizes CSS `will-change`, 3D transforms, and layer compositing for a consistent 60FPS experience.
 
-## How to Run Locally
-1. Clone this repository.
-2. Navigate into the project folder.
-3. Run a local development server (e.g., using Python or Node):
+## 🛠 Tech Stack
+
+- **Vite** (Build Tool & Dev Server)
+- **Vanilla JavaScript (ES6 Modules)**
+- **Three.js** (WebGL 3D Engine)
+- **GSAP (GreenSock)** (High-performance animation physics)
+- **HTML5 Canvas** (Procedural graphics)
+- **CSS3** (Hardware-accelerated animations & UI styling)
+
+## 🚀 Running Locally
+
+To run this project on your local machine:
+
+1. **Clone the repository:**
    ```bash
-   python3 -m http.server 8080
+   git clone https://github.com/Tamim544/zenitsu-masterclass.git
+   cd zenitsu-masterclass
    ```
-4. Open `http://localhost:8080` in your web browser.
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+4. **Open in browser:**
+   Navigate to `http://localhost:5173` in your web browser.
 
-## Assets
-All character and background assets were custom-generated using AI, and programmatically processed to include perfect alpha-channel transparency for seamless web blending.
+## 📸 Preview
+*(The project features extreme full-screen animations and dynamic lighting. View locally for the complete 60FPS cinematic experience.)*
