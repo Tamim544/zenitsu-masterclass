@@ -123,8 +123,64 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- GSAP ScrollTrigger Animations ---
     // Section 2 GSAP Scroll Animations
     const s2Img = document.querySelector('.s2-bg-img');
-    const s2Title = document.querySelector('.s2-title');
-    const s2Para = document.querySelector('.s2-para');
+    const s2Panel = document.getElementById('s2-panel');
+    const s2Canvas = document.getElementById('s2-canvas');
+    const s2Ctx = s2Canvas.getContext('2d');
+    
+    // Resize s2Canvas
+    function resizeS2Canvas() {
+        s2Canvas.width = window.innerWidth;
+        s2Canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeS2Canvas);
+    resizeS2Canvas();
+
+    // Section 2 Particles (Lightning Streaks)
+    const streaks = [];
+    for(let i = 0; i < 50; i++) {
+        streaks.push({
+            x: Math.random() * s2Canvas.width,
+            y: Math.random() * s2Canvas.height,
+            length: Math.random() * 150 + 50,
+            speed: Math.random() * 30 + 15,
+            opacity: Math.random() * 0.5 + 0.1
+        });
+    }
+
+    let flashIntensity = 0;
+
+    function animateS2() {
+        s2Ctx.clearRect(0, 0, s2Canvas.width, s2Canvas.height);
+        
+        // Draw Streaks
+        s2Ctx.lineWidth = 2;
+        s2Ctx.strokeStyle = 'rgba(255, 204, 0, 0.8)';
+        
+        streaks.forEach(s => {
+            s.x += s.speed;
+            if (s.x > s2Canvas.width) {
+                s.x = -s.length;
+                s.y = Math.random() * s2Canvas.height;
+            }
+            s2Ctx.globalAlpha = s.opacity;
+            s2Ctx.beginPath();
+            s2Ctx.moveTo(s.x, s.y);
+            s2Ctx.lineTo(s.x + s.length, s.y);
+            s2Ctx.stroke();
+        });
+        
+        // Draw Flash
+        if (flashIntensity > 0) {
+            s2Ctx.globalAlpha = flashIntensity;
+            s2Ctx.fillStyle = '#ffffff';
+            s2Ctx.fillRect(0, 0, s2Canvas.width, s2Canvas.height);
+            flashIntensity -= 0.1; // Fade out quickly
+        }
+        
+        s2Ctx.globalAlpha = 1.0;
+        requestAnimationFrame(animateS2);
+    }
+    animateS2();
 
     // Fade image in
     gsap.to(s2Img, {
@@ -137,33 +193,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Staggered Content Entry
-    gsap.fromTo([s2Title, s2Para], 
+    // Sixfold Flash Sequence & Panel Entry
+    let hasFlashed = false;
+    gsap.fromTo(s2Panel, 
         { x: -100, opacity: 0 },
         {
             x: 0,
             opacity: 1,
-            stagger: 0.2,
             ease: "back.out(1.7)",
             duration: 1,
             scrollTrigger: {
                 trigger: '#section-2',
                 start: "top 50%",
+                onEnter: () => {
+                    if (!hasFlashed) {
+                        hasFlashed = true;
+                        // Trigger 6 rapid flashes
+                        let strikes = 0;
+                        const flashInterval = setInterval(() => {
+                            flashIntensity = 0.8; // Trigger flash
+                            strikes++;
+                            if (strikes >= 6) clearInterval(flashInterval);
+                        }, 150); // 150ms between strikes
+                    }
+                },
+                onLeaveBack: () => hasFlashed = false, // Reset if they scroll up
                 toggleActions: "play none none reverse"
             }
         }
     );
 
-    // Subtle Mouse Parallax for Section 2
+    // 3D Mouse Parallax for Section 2
     const section2 = document.getElementById('section-2');
     section2.addEventListener('mousemove', (e) => {
-        const x = (e.clientX / window.innerWidth - 0.5) * 20; // Subtle 10px movement
-        const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        const x = (e.clientX / window.innerWidth - 0.5);
+        const y = (e.clientY / window.innerHeight - 0.5);
         
+        // Subtle image shift
         gsap.to(s2Img, {
-            x: -x,
-            y: -y,
+            x: -x * 20,
+            y: -y * 20,
             duration: 1,
+            ease: "power2.out"
+        });
+        
+        // 3D tilt on the panel
+        gsap.to(s2Panel, {
+            rotationY: x * 15,
+            rotationX: -y * 15,
+            transformPerspective: 1000,
+            duration: 0.5,
             ease: "power2.out"
         });
     });
