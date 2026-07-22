@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
 import * as THREE from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -14,6 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const awakeDetails = document.getElementById('awake-details');
     const bgLayer = document.getElementById('bg-layer');
     
+    // --- Smooth Scrolling (Lenis) ---
+    const lenis = new Lenis();
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
     const canvas = document.getElementById('lightning-canvas');
     const ctx = canvas.getContext('2d');
     
@@ -102,6 +111,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- GSAP ScrollTrigger Animations ---
+    // 3D Apple-Style Pinning of Hero Section
+    gsap.set('#scene-container', { transformPerspective: 1000 });
+    gsap.to('#scene-container', {
+        rotationX: -15,
+        scale: 0.9,
+        opacity: 0.3,
+        transformOrigin: "center top",
+        scrollTrigger: {
+            trigger: '#scene-container',
+            start: "top top",
+            end: "+=100%",
+            scrub: true,
+            pin: true,
+            pinSpacing: false // Allows the next section to slide OVER it
+        }
+    });
+
     const s2Img = document.querySelector('#section-2 img');
     const s2Content = document.querySelector('#section-2 .content');
 
