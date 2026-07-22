@@ -1,0 +1,390 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Permanent Marker', cursive;
+    cursor: none;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    perspective: 1500px;
+    transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.container.shake {
+    animation: screenShake 0.3s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes screenShake {
+    0%, 100% { 
+        transform: perspective(1500px) translate3d(0, 0, 0); 
+        filter: none; 
+    }
+    10%, 30%, 50%, 70%, 90% { 
+        transform: perspective(1500px) translate3d(-15px, -15px, 0) scale(1.05); 
+        filter: drop-shadow(15px 0 0 rgba(255,0,0,0.8)) drop-shadow(-15px 0 0 rgba(0,255,255,0.8)); 
+    }
+    20%, 40%, 60%, 80% { 
+        transform: perspective(1500px) translate3d(15px, 15px, 0) scale(1.05); 
+        filter: drop-shadow(-15px 0 0 rgba(255,0,0,0.8)) drop-shadow(15px 0 0 rgba(0,255,255,0.8)); 
+    }
+}
+
+.layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+}
+
+@keyframes shiver {
+    0% { transform: translateX(-50%) translate(0, 0); }
+    25% { transform: translateX(-50%) translate(-1px, 2px); }
+    50% { transform: translateX(-50%) translate(2px, -1px); }
+    75% { transform: translateX(-50%) translate(-2px, -2px); }
+    100% { transform: translateX(-50%) translate(1px, 1px); }
+}
+
+.layer img {
+    position: absolute;
+    bottom: -2%;
+    left: 50%;
+    transform: translateX(-50%);
+    object-fit: contain;
+}
+
+.bg-layer {
+    background-image: url('/assets/zenitsu_bg.png');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    transform: translateZ(-100px) scale(1.15);
+}
+
+.asleep-layer {
+    z-index: 2;
+}
+
+#lightning-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+    transform: translateZ(50px);
+}
+
+#three-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 6; /* Over UI layer but under overlay */
+    pointer-events: none;
+}
+
+.awake-layer {
+    z-index: 4;
+    /* Initial clip-path, showing only the right side or top */
+    /* We'll use JS to control this */
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); 
+    will-change: clip-path;
+}
+
+#zenitsu-awake {
+    height: 95%;
+    filter: brightness(1.2);
+    animation: shiver 0.15s infinite;
+}
+
+#zenitsu-asleep {
+    height: 95%;
+    filter: contrast(1.2) brightness(1.1);
+}
+
+#divider-line {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 6px;
+    height: 100%;
+    background: #ffcc00;
+    box-shadow: 0 0 15px #ffcc00, 0 0 30px #fff;
+    z-index: 10;
+    pointer-events: none;
+    transform: translateX(-50%);
+}
+
+.ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none; /* Let clicks pass through to container */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px;
+}
+
+#title-text {
+    font-size: 4rem;
+    color: #ffcc00;
+    text-shadow: 0 0 20px #ff9900, 0 0 40px #ff3300;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    text-align: center;
+    letter-spacing: 5px;
+}
+
+.slider-hint {
+    text-align: center;
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.7);
+    animation: pulse 2s infinite;
+}
+
+.details-panel {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    /* Glassmorphism upgrade */
+    background: rgba(10, 10, 10, 0.5);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 5px solid #ffcc00;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 400px;
+    color: #fff;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    opacity: 0;
+    transform: translateZ(100px) translateY(20px);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+}
+
+.details-panel.show {
+    opacity: 1;
+    transform: translateZ(100px) translateY(0);
+}
+
+.awake-panel {
+    left: auto;
+    right: 50px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 5px solid #ffcc00;
+}
+
+.details-panel h2 {
+    color: #ffcc00;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+}
+
+.details-panel h3 {
+    color: #fff;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+.details-panel p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.details-panel ul {
+    list-style-type: none;
+    margin-top: 15px;
+    padding-left: 0;
+}
+
+.details-panel li {
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+}
+
+.details-panel li strong {
+    color: #ffcc00;
+    margin-right: 10px;
+}
+
+.details-panel .lore-text {
+    font-style: italic;
+    color: #ccc;
+    margin-top: 15px;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+/* Cinematic Intro Styles */
+#intro-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('/assets/zenitsu_bg.png') center/cover;
+    z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease-out, visibility 1s;
+    cursor: none;
+}
+
+#intro-overlay h2 {
+    font-size: 3rem;
+    color: #fff;
+    text-shadow: 0 0 20px #fff;
+    animation: pulse 2s infinite;
+    letter-spacing: 5px;
+}
+
+/* --- Preloader --- */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-out, visibility 0.5s;
+}
+#loading-text {
+    font-size: 3rem;
+    color: #ffcc00;
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+}
+.loading-bar-container {
+    width: 300px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+#loading-bar {
+    width: 0%;
+    height: 100%;
+    background: #ffcc00;
+    box-shadow: 0 0 10px #ffcc00;
+    transition: width 0.2s ease-out;
+}
+
+/* --- Custom Cursor --- */
+.custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    background-color: #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+}
+.cursor-follower {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(255, 204, 0, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, border-color 0.2s;
+}
+.cursor-follower.drag-active {
+    width: 50px;
+    height: 50px;
+    border-color: #ffcc00;
+    background: rgba(255, 204, 0, 0.1);
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .details-panel, .awake-panel {
+        width: 90%;
+        max-width: none;
+        bottom: 20px;
+        left: 5%;
+        right: 5%;
+        padding: 15px;
+    }
+    
+    .details-panel h2 {
+        font-size: 1.4rem;
+    }
+    
+    .details-panel h3 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    .details-panel p {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+    
+    .details-panel li {
+        font-size: 0.85rem;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+    
+    #title-text {
+        font-size: 2rem;
+        top: 10%;
+    }
+    
+    .slider-hint {
+        bottom: 30%;
+        font-size: 1rem;
+    }
+    
+    .custom-cursor, .cursor-follower {
+        display: none; /* Hide custom cursor on touch devices */
+    }
+}

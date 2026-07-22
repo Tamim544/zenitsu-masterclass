@@ -4,27 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thunderclap and Flash - Zenitsu</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/src/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <h1 id="loading-text">0%</h1>
+        <div class="loading-bar-container">
+            <div id="loading-bar"></div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+    <div class="cursor-follower" id="cursor-follower"></div>
+
+    <!-- Cinematic Intro -->
+    <div id="intro-overlay">
+        <h2 id="intro-text">Click to Awaken</h2>
+    </div>
+
     <div class="container" id="scene-container">
         <!-- Background Layer -->
         <div class="layer bg-layer" id="bg-layer"></div>
         
         <!-- Asleep/Thunderclap Zenitsu Layer (Base) -->
         <div class="layer asleep-layer" id="asleep-layer">
-            <img src="assets/zenitsu_asleep_transparent.png" alt="Zenitsu Asleep" id="zenitsu-asleep">
+            <img src="/assets/zenitsu_asleep_transparent.png" alt="Zenitsu Asleep" id="zenitsu-asleep">
         </div>
         
         <!-- Canvas for Lightning Effects -->
         <canvas id="lightning-canvas"></canvas>
         
+        <!-- Three.js Canvas for 3D Embers -->
+        <canvas id="three-canvas"></canvas>
+        
         <!-- Awake Zenitsu Layer (Top with Clip-Path) -->
         <div class="layer awake-layer" id="awake-layer">
-            <img src="assets/zenitsu_awake_transparent.png" alt="Zenitsu Awake" id="zenitsu-awake">
+            <img src="/assets/zenitsu_awake_transparent.png" alt="Zenitsu Awake" id="zenitsu-awake">
         </div>
 
         <div id="divider-line"></div>
@@ -33,20 +53,38 @@
         <div class="ui-layer">
             <h1 id="title-text">THUNDERCLAP & FLASH</h1>
             
-            <div id="zenitsu-details" class="details-panel">
-                <h2>Zenitsu Agatsuma</h2>
-                <p><strong>Breathing Style:</strong> Thunder Breathing (雷の呼吸)</p>
-                <p><strong>Form:</strong> First Form: Thunderclap and Flash (壱ノ型 霹靂一閃)</p>
-                <p class="lore-text">When asleep, his fear vanishes, unleashing his true, lightning-fast potential.</p>
+            <!-- Awake Details Panel -->
+            <div class="details-panel awake-panel" id="awake-details">
+                <h2>The Coward</h2>
+                <h3>Zenitsu Agatsuma</h3>
+                <p>Despite passing the Final Selection, Zenitsu suffers from extreme low self-esteem and paralyzing fear. He constantly claims he doesn't have long to live and begs girls to marry him so he doesn't die alone.</p>
+                <ul>
+                    <li><strong>Trait:</strong> Extreme Cowardice</li>
+                    <li><strong>Sense:</strong> Enhanced Hearing</li>
+                    <li><strong>State:</strong> Terrified</li>
+                </ul>
             </div>
+
+            <!-- Asleep Details Panel -->
+            <div class="details-panel" id="details-panel">
+            <h2>Zenitsu Agatsuma</h2>
+            <h3>Thunder Breathing: First Form</h3>
+            <p>When Zenitsu falls asleep, his nerves settle and his true power awakens. The "Thunderclap and Flash" is a high-speed dash and slash technique that moves faster than sound, decapitating demons before they even realize what happened.</p>
+            <ul>
+                <li><strong>Style:</strong> Thunder Breathing</li>
+                <li><strong>Rank:</strong> Demon Slayer</li>
+                <li><strong>Speed:</strong> Immeasurable</li>
+            </ul>
+        </div>
 
             <div class="slider-hint">Drag across the screen</div>
         </div>
     </div>
 
-    <!-- Audio Elements (Placeholders) -->
-    <audio id="thunder-audio" src="assets/thunder.mp3" preload="auto"></audio>
+    <!-- Audio Elements (Free Sounds) -->
+    <audio id="sword-audio" src="https://actions.google.com/sounds/v1/foley/whoosh_sword_swing.ogg" preload="auto"></audio>
+    <audio id="thunder-audio" src="https://actions.google.com/sounds/v1/weather/thunder_crack.ogg" preload="auto"></audio>
 
-    <script src="script.js"></script>
+    <script type="module" src="/src/main.js"></script>
 </body>
 </html>

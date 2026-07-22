@@ -1,0 +1,20 @@
+{
+  "name": "zentisu-file",
+  "version": "1.0.0",
+  "description": "An interactive, front-end web experience paying homage to Zenitsu Agatsuma from *Demon Slayer (Kimetsu no Yaiba)*.",
+  "main": "script.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "three": "^0.185.1",
+    "vite": "^8.1.5"
+  }
+}
