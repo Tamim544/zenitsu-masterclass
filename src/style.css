@@ -327,20 +327,21 @@ body {
     text-align: center;
     max-width: 800px;
     padding: 3rem;
-    background: rgba(0,0,0,0.6);
-    border: 1px solid #ffcc00;
-    backdrop-filter: blur(10px);
+    background: rgba(0,0,0,0.85); /* Darkened for better contrast */
+    border: 1px solid rgba(255, 204, 0, 0.5); /* Subtler border */
+    backdrop-filter: blur(12px);
     border-radius: 15px;
     opacity: 0; /* GSAP will reveal this */
     transform: translateY(50px);
-    box-shadow: 0 0 30px rgba(255, 204, 0, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
 }
 
 #section-2 h2 {
     font-size: 4rem;
-    color: #ffcc00;
+    color: #ffffff; /* Changed to white for readability against the yellow image */
     margin-bottom: 1.5rem;
-    text-shadow: 0 0 15px #ffcc00;
+    text-shadow: 2px 2px 10px rgba(0,0,0,1); /* Dark shadow to make it pop */
+    letter-spacing: 3px;
 }
 
 #section-2 p {
