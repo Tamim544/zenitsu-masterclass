@@ -24,10 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingText = document.getElementById('loading-text');
     const loadingBar = document.getElementById('loading-bar');
     
+    const basePath = import.meta.env.BASE_URL;
+
     const assetsToLoad = [
-        '/assets/zenitsu_bg.png',
-        '/assets/zenitsu_asleep_transparent.png',
-        '/assets/zenitsu_awake_transparent.png'
+        `${basePath}assets/zenitsu_bg.png`,
+        `${basePath}assets/zenitsu_asleep_transparent.png`,
+        `${basePath}assets/zenitsu_awake_transparent.png`
     ];
     let loadedCount = 0;
     
@@ -117,9 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Dynamic Lighting on Background
         if (p > 70 && Math.random() > 0.5) {
-            bgLayer.style.background = `radial-gradient(circle at ${p}% 50%, rgba(255, 255, 100, 0.4) 0%, transparent 40%), url('/assets/zenitsu_bg.png') center/cover`;
+            bgLayer.style.background = `radial-gradient(circle at ${p}% 50%, rgba(255, 255, 100, 0.4) 0%, transparent 40%), url('${basePath}assets/zenitsu_bg.png') center/cover`;
         } else {
-            bgLayer.style.background = `url('/assets/zenitsu_bg.png') center/cover`;
+            bgLayer.style.background = `url('${basePath}assets/zenitsu_bg.png') center/cover`;
         }
 
         // Title Opacity
