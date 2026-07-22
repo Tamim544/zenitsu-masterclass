@@ -128,12 +128,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const s2Img = document.querySelector('#section-2 img');
-    const s2Content = document.querySelector('#section-2 .content');
+    // Section 2 GSAP Scroll Animations
+    const s2Img = document.querySelector('.s2-bg-img');
+    const s2Title = document.querySelector('.s2-title');
+    const s2Para = document.querySelector('.s2-para');
+    const bgText = document.querySelector('.bg-text');
 
+    // Fade image in
     gsap.to(s2Img, {
         opacity: 1,
-        scale: 1,
         scrollTrigger: {
             trigger: '#section-2',
             start: "top 80%",
@@ -142,15 +145,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    gsap.to(s2Content, {
-        opacity: 1,
-        y: 0,
-        scrollTrigger: {
-            trigger: '#section-2',
-            start: "top 60%",
-            end: "top 30%",
-            scrub: 1
+    // Parallax background text
+    gsap.fromTo(bgText, 
+        { y: 100 },
+        { 
+            y: -150, 
+            scrollTrigger: {
+                trigger: '#section-2',
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1
+            }
         }
+    );
+
+    // Staggered Content Entry
+    gsap.fromTo([s2Title, s2Para], 
+        { x: -100, opacity: 0 },
+        {
+            x: 0,
+            opacity: 1,
+            stagger: 0.2,
+            ease: "back.out(1.7)",
+            duration: 1,
+            scrollTrigger: {
+                trigger: '#section-2',
+                start: "top 50%",
+                toggleActions: "play none none reverse"
+            }
+        }
+    );
+
+    // Mouse Parallax for Section 2
+    const section2 = document.getElementById('section-2');
+    section2.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 20;
+        const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        
+        gsap.to(s2Img, {
+            x: -x * 2,
+            y: -y * 2,
+            duration: 1,
+            ease: "power2.out"
+        });
+        
+        gsap.to(bgText, {
+            x: x * 1.5,
+            y: y * 1.5,
+            duration: 1,
+            ease: "power2.out"
+        });
     });
 
     window.addEventListener('resize', () => {
