@@ -247,6 +247,189 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- SECTION 3: Godspeed ---
+    const s3Img = document.querySelector('.s3-bg-img');
+    const s3Panel = document.getElementById('s3-panel');
+    const s3Canvas = document.getElementById('s3-canvas');
+    const s3Ctx = s3Canvas.getContext('2d');
+    
+    function resizeS3Canvas() {
+        s3Canvas.width = window.innerWidth;
+        s3Canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeS3Canvas);
+    resizeS3Canvas();
+
+    // Anime Speed Lines
+    const speedLines = [];
+    for(let i=0; i<100; i++) {
+        speedLines.push({
+            angle: Math.random() * Math.PI * 2,
+            dist: Math.random() * s3Canvas.width,
+            length: Math.random() * 200 + 100,
+            speed: Math.random() * 40 + 20,
+            opacity: Math.random() * 0.3 + 0.1,
+            color: Math.random() > 0.5 ? '#ffcc00' : '#ffffff'
+        });
+    }
+
+    function animateS3() {
+        s3Ctx.clearRect(0, 0, s3Canvas.width, s3Canvas.height);
+        const cx = s3Canvas.width / 2;
+        const cy = s3Canvas.height / 2;
+        
+        speedLines.forEach(line => {
+            line.dist += line.speed;
+            if (line.dist > s3Canvas.width) {
+                line.dist = 50;
+            }
+            const x1 = cx + Math.cos(line.angle) * line.dist;
+            const y1 = cy + Math.sin(line.angle) * line.dist;
+            const x2 = cx + Math.cos(line.angle) * (line.dist + line.length);
+            const y2 = cy + Math.sin(line.angle) * (line.dist + line.length);
+            
+            s3Ctx.beginPath();
+            s3Ctx.moveTo(x1, y1);
+            s3Ctx.lineTo(x2, y2);
+            s3Ctx.strokeStyle = line.color;
+            s3Ctx.globalAlpha = line.opacity;
+            s3Ctx.lineWidth = 2;
+            s3Ctx.stroke();
+        });
+        s3Ctx.globalAlpha = 1.0;
+        requestAnimationFrame(animateS3);
+    }
+    animateS3();
+
+    // Section 3 GSAP Reveal
+    gsap.to(s3Img, {
+        scale: 1, // scales down from 1.5
+        opacity: 1,
+        scrollTrigger: {
+            trigger: '#section-3',
+            start: "top 80%",
+            end: "top 0%",
+            scrub: 1
+        }
+    });
+
+    gsap.fromTo(s3Panel,
+        { scale: 0.8, opacity: 0, filter: 'blur(10px)' },
+        {
+            scale: 1,
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: "power3.out",
+            duration: 1,
+            scrollTrigger: {
+                trigger: '#section-3',
+                start: "top 50%",
+                toggleActions: "play none none reverse"
+            }
+        }
+    );
+
+    // Section 3 Parallax
+    const section3 = document.getElementById('section-3');
+    section3.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5);
+        const y = (e.clientY / window.innerHeight - 0.5);
+        gsap.to(s3Img, { x: -x * 30, y: -y * 30, duration: 1, ease: "power2.out" });
+        gsap.to(s3Panel, { rotationY: x * 20, rotationX: -y * 20, transformPerspective: 1000, duration: 0.5, ease: "power2.out" });
+    });
+
+    // --- SECTION 4: Seventh Form ---
+    const s4Img = document.querySelector('.s4-bg-img');
+    const s4Panel = document.getElementById('s4-panel');
+    const s4Canvas = document.getElementById('s4-canvas');
+    const s4Ctx = s4Canvas.getContext('2d');
+    
+    function resizeS4Canvas() {
+        s4Canvas.width = window.innerWidth;
+        s4Canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeS4Canvas);
+    resizeS4Canvas();
+
+    // Fire Particles
+    const fireEmbers = [];
+    for(let i=0; i<150; i++) {
+        fireEmbers.push({
+            x: Math.random() * window.innerWidth, // Initialize with actual window width
+            y: Math.random() * window.innerHeight,
+            size: Math.random() * 4 + 1,
+            speedY: Math.random() * 3 + 1,
+            speedX: (Math.random() - 0.5) * 2,
+            opacity: Math.random(),
+            pulse: Math.random() * 0.1
+        });
+    }
+
+    function animateS4() {
+        s4Ctx.clearRect(0, 0, s4Canvas.width, s4Canvas.height);
+        fireEmbers.forEach(e => {
+            e.y -= e.speedY;
+            e.x += e.speedX;
+            e.opacity += e.pulse;
+            if (e.opacity > 1 || e.opacity < 0) e.pulse *= -1;
+            
+            if (e.y < 0) {
+                e.y = s4Canvas.height;
+                e.x = Math.random() * s4Canvas.width;
+            }
+            
+            s4Ctx.beginPath();
+            s4Ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
+            s4Ctx.fillStyle = `rgba(255, ${Math.floor(Math.random() * 100 + 100)}, 0, ${e.opacity})`;
+            s4Ctx.shadowBlur = 10;
+            s4Ctx.shadowColor = '#ff6600';
+            s4Ctx.fill();
+        });
+        s4Ctx.shadowBlur = 0;
+        requestAnimationFrame(animateS4);
+    }
+    animateS4();
+
+    // Section 4 GSAP Reveal (Color Burst & Shake)
+    gsap.to(s4Img, {
+        opacity: 1,
+        filter: 'grayscale(0%) contrast(1) brightness(1)',
+        scrollTrigger: {
+            trigger: '#section-4',
+            start: "top 60%",
+            end: "top 20%",
+            scrub: 1,
+            onEnter: () => {
+                s4Img.parentElement.classList.add('shake');
+                setTimeout(() => s4Img.parentElement.classList.remove('shake'), 400);
+            }
+        }
+    });
+
+    gsap.fromTo(s4Panel,
+        { y: 100, opacity: 0 },
+        {
+            y: 0,
+            opacity: 1,
+            ease: "elastic.out(1, 0.7)",
+            duration: 1.5,
+            scrollTrigger: {
+                trigger: '#section-4',
+                start: "top 50%",
+                toggleActions: "play none none reverse"
+            }
+        }
+    );
+
+    // Section 4 Parallax
+    const section4 = document.getElementById('section-4');
+    section4.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5);
+        const y = (e.clientY / window.innerHeight - 0.5);
+        gsap.to(s4Img, { x: -x * 20, y: -y * 20, duration: 1, ease: "power2.out" });
+        gsap.to(s4Panel, { rotationY: x * 15, rotationX: -y * 15, transformPerspective: 1000, duration: 0.5, ease: "power2.out" });
+    });
+
     window.addEventListener('resize', () => {
         canvas.width = container.clientWidth;
         canvas.height = container.clientHeight;
