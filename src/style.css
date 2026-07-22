@@ -308,6 +308,7 @@ body {
     overflow: hidden;
     z-index: 2; /* Slides over hero */
     box-shadow: 0 -20px 50px rgba(0,0,0,1); /* Dark shadow over the receding hero */
+    margin-top: 150vh; /* Buffer for the hero scroll-scrub sequence */
 }
 
 .s2-gradient-overlay {

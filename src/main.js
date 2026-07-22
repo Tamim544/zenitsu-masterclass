@@ -111,23 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- GSAP ScrollTrigger Animations ---
-    // 3D Apple-Style Pinning of Hero Section
-    gsap.set('#scene-container', { transformPerspective: 1000 });
-    gsap.to('#scene-container', {
-        rotationX: -15,
-        scale: 0.9,
-        opacity: 0.3,
-        transformOrigin: "center top",
-        scrollTrigger: {
-            trigger: '#scene-container',
-            start: "top top",
-            end: "+=100%",
-            scrub: true,
-            pin: true,
-            pinSpacing: false // Allows the next section to slide OVER it
-        }
-    });
-
     // Section 2 GSAP Scroll Animations
     const s2Img = document.querySelector('.s2-bg-img');
     const s2Title = document.querySelector('.s2-title');
@@ -171,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.dispatchEvent(new Event('resize'));
 
     // --- GSAP Physics State ---
-    const proxy = { percent: 50, rx: 0, ry: 0 };
+    const proxy = { percent: 0, rx: 0, ry: 0 }; // Start at 0%
     let isDragging = false;
 
     function updateUI() {
@@ -221,36 +204,50 @@ document.addEventListener('DOMContentLoaded', () => {
         container.style.transform = `perspective(1500px) rotateX(${proxy.rx}deg) rotateY(${proxy.ry}deg)`;
     }
 
-    // --- Interaction Events ---
-    container.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        follower.classList.add('drag-active');
-        gsap.to(proxy, { percent: (e.clientX / window.innerWidth) * 100, duration: 0.8, ease: "power3.out", onUpdate: updateUI });
-    });
-    window.addEventListener('mouseup', () => {
-        isDragging = false;
-        follower.classList.remove('drag-active');
+    // --- Master Scroll Sequence ---
+    // 1. Pin the Hero Section for the entire sequence (250% scroll distance)
+    gsap.set('#scene-container', { transformPerspective: 1000 });
+    ScrollTrigger.create({
+        trigger: '#scene-container',
+        start: 'top top',
+        end: '+=250%',
+        pin: true,
+        pinSpacing: false // Allows section 2 (which has margin-top: 150vh) to slide over it at the end
     });
 
-    window.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-            gsap.to(proxy, { percent: (e.clientX / window.innerWidth) * 100, duration: 0.4, ease: "power2.out", onUpdate: updateUI });
+    // 2. Awakening Animation (Scroll scrub from 0% to 150%)
+    gsap.to(proxy, {
+        percent: 100,
+        ease: "none",
+        scrollTrigger: {
+            trigger: '#scene-container',
+            start: 'top top',
+            end: '+=150%',
+            scrub: true,
+            onUpdate: updateUI
         }
+    });
+
+    // 3. 3D Tilt Back Animation (Scroll scrub from 150% to 250%)
+    gsap.to('#scene-container', {
+        rotationX: -15,
+        scale: 0.9,
+        opacity: 0.3,
+        transformOrigin: "center top",
+        scrollTrigger: {
+            trigger: '#scene-container',
+            start: 'top -150%', // Triggers exactly when awakening finishes
+            end: '+=100%',
+            scrub: true
+        }
+    });
+
+    // --- Interaction Events (Mouse Parallax Only) ---
+    window.addEventListener('mousemove', (e) => {
         const targetRx = (e.clientY / window.innerHeight - 0.5) * -15;
         const targetRy = (e.clientX / window.innerWidth - 0.5) * 15;
         gsap.to(proxy, { rx: targetRx, ry: targetRy, duration: 1, ease: "power2.out", onUpdate: updateUI });
     });
-
-    container.addEventListener('touchstart', (e) => {
-        isDragging = true;
-        gsap.to(proxy, { percent: (e.touches[0].clientX / window.innerWidth) * 100, duration: 0.8, ease: "power3.out", onUpdate: updateUI });
-    }, {passive: true});
-    window.addEventListener('touchend', () => isDragging = false);
-    window.addEventListener('touchmove', (e) => {
-        if (isDragging) {
-            gsap.to(proxy, { percent: (e.touches[0].clientX / window.innerWidth) * 100, duration: 0.4, ease: "power2.out", onUpdate: updateUI });
-        }
-    }, {passive: true});
 
     // --- Canvas Lightning Logic ---
     let lightningBranches = [];
