@@ -323,10 +323,10 @@ body {
 
 .s2-bg-img {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: -2%;
+    left: -2%;
+    width: 104%;
+    height: 104%;
     object-fit: cover;
     opacity: 0; /* GSAP will reveal this */
     z-index: 1;

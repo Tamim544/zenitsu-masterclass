@@ -76,9 +76,19 @@ document.addEventListener('DOMContentLoaded', () => {
     introOverlay.addEventListener('click', () => {
         introOverlay.style.opacity = 0;
         introOverlay.style.visibility = 'hidden';
-        if(swordAudio.readyState >= 2 || swordAudio.networkState === 1) {
-            swordAudio.volume = 0.5;
-            swordAudio.play().catch(e => console.log(e));
+        
+        // Unlock audio contexts on first user interaction
+        swordAudio.volume = 0.5;
+        swordAudio.play().catch(e => console.log(e));
+
+        thunderAudio.volume = 0; // Play silently to unlock
+        const tPlay = thunderAudio.play();
+        if (tPlay !== undefined) {
+            tPlay.then(() => {
+                thunderAudio.pause();
+                thunderAudio.currentTime = 0;
+                thunderAudio.volume = 0.7;
+            }).catch(() => {});
         }
     });
 
@@ -144,6 +154,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     );
 
+    // Subtle Mouse Parallax for Section 2
+    const section2 = document.getElementById('section-2');
+    section2.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 20; // Subtle 10px movement
+        const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        
+        gsap.to(s2Img, {
+            x: -x,
+            y: -y,
+            duration: 1,
+            ease: "power2.out"
+        });
+    });
+
     window.addEventListener('resize', () => {
         canvas.width = container.clientWidth;
         canvas.height = container.clientHeight;
@@ -185,9 +209,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 container.classList.add('shake');
                 setTimeout(() => container.classList.remove('shake'), 400); // 400ms CSS duration
 
-                if(thunderAudio.readyState >= 2 || thunderAudio.networkState === 1) {
-                    thunderAudio.volume = 0.7;
-                    thunderAudio.play().catch(() => {});
+                thunderAudio.volume = 0.7;
+                thunderAudio.currentTime = 0;
+                const playPromise = thunderAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {});
                 }
             }
         } else if (p < 20) {
