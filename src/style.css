@@ -356,6 +356,13 @@ body {
     will-change: transform, opacity;
 }
 
+.s3-panel {
+    left: auto;
+    right: 50px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 5px solid #ffcc00;
+}
+
 /* SECTION 3 */
 .s3-bg-img {
     position: absolute;
