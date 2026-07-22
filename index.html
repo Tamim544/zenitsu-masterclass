@@ -27,7 +27,10 @@
         <h2 id="intro-text">Click to Awaken</h2>
     </div>
 
-    <div class="container" id="scene-container">
+    <!-- HERO SECTION (Interactive) -->
+    <section class="hero-section container" id="scene-container">
+        <!-- 3D Canvas Layer -->
+        <canvas id="three-canvas"></canvas>
         <!-- Background Layer -->
         <div class="layer bg-layer" id="bg-layer"></div>
         
@@ -38,9 +41,6 @@
         
         <!-- Canvas for Lightning Effects -->
         <canvas id="lightning-canvas"></canvas>
-        
-        <!-- Three.js Canvas for 3D Embers -->
-        <canvas id="three-canvas"></canvas>
         
         <!-- Awake Zenitsu Layer (Top with Clip-Path) -->
         <div class="layer awake-layer" id="awake-layer">
@@ -77,9 +77,19 @@
             </ul>
         </div>
 
-            <div class="slider-hint">Drag across the screen</div>
+            <div class="slider-hint">Drag Across to Awaken</div>
+            <div class="scroll-hint">Scroll Down ↓</div>
         </div>
-    </div>
+    </section>
+
+    <!-- SECTION 2 (Scroll Reveal) -->
+    <section class="scroll-section" id="section-2">
+        <img src="/zenitsu-masterclass/assets/zenitsu_section2.png" alt="Thunder Breathing First Form">
+        <div class="content">
+            <h2>Sixfold Extension</h2>
+            <p>While Zenitsu could initially only perform the First Form, he honed it to absolute perfection. By chaining the technique together, he created the "Sixfold" extension—a continuous, blindingly fast series of strikes that overwhelms even the most powerful demons.</p>
+        </div>
+    </section>
 
     <!-- Audio Elements (Free Sounds) -->
     <audio id="sword-audio" src="https://actions.google.com/sounds/v1/foley/whoosh_sword_swing.ogg" preload="auto"></audio>

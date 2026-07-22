@@ -1,5 +1,8 @@
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
+
+gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('scene-container');
@@ -95,6 +98,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particlesMesh);
+
+
+
+    // --- GSAP ScrollTrigger Animations ---
+    const s2Img = document.querySelector('#section-2 img');
+    const s2Content = document.querySelector('#section-2 .content');
+
+    gsap.to(s2Img, {
+        opacity: 1,
+        scale: 1,
+        scrollTrigger: {
+            trigger: '#section-2',
+            start: "top 80%",
+            end: "top 20%",
+            scrub: 1
+        }
+    });
+
+    gsap.to(s2Content, {
+        opacity: 1,
+        y: 0,
+        scrollTrigger: {
+            trigger: '#section-2',
+            start: "top 60%",
+            end: "top 30%",
+            scrub: 1
+        }
+    });
 
     window.addEventListener('resize', () => {
         canvas.width = container.clientWidth;
