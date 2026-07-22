@@ -205,41 +205,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Master Scroll Sequence ---
-    // 1. Pin the Hero Section for the entire sequence (250% scroll distance)
     gsap.set('#scene-container', { transformPerspective: 1000 });
-    ScrollTrigger.create({
-        trigger: '#scene-container',
-        start: 'top top',
-        end: '+=250%',
-        pin: true,
-        pinSpacing: false // Allows section 2 (which has margin-top: 150vh) to slide over it at the end
-    });
+    
+    // Explicit initial render
+    updateUI();
 
-    // 2. Awakening Animation (Scroll scrub from 0% to 150%)
-    gsap.to(proxy, {
-        percent: 100,
-        ease: "none",
+    const masterTl = gsap.timeline({
         scrollTrigger: {
             trigger: '#scene-container',
             start: 'top top',
-            end: '+=150%',
-            scrub: true,
-            onUpdate: updateUI
+            end: '+=250%',
+            scrub: 1,
+            pin: true,
+            pinSpacing: false // Allows section 2 to slide over
         }
     });
 
-    // 3. 3D Tilt Back Animation (Scroll scrub from 150% to 250%)
-    gsap.to('#scene-container', {
+    // 1. Awakening Animation (0 to 60% of timeline -> 150vh)
+    masterTl.to(proxy, {
+        percent: 100,
+        ease: "none",
+        duration: 1.5,
+        onUpdate: updateUI
+    });
+
+    // 2. 3D Tilt Back (60% to 100% of timeline -> 100vh)
+    masterTl.to('#scene-container', {
         rotationX: -15,
         scale: 0.9,
         opacity: 0.3,
         transformOrigin: "center top",
-        scrollTrigger: {
-            trigger: '#scene-container',
-            start: 'top -150%', // Triggers exactly when awakening finishes
-            end: '+=100%',
-            scrub: true
-        }
+        ease: "power1.inOut",
+        duration: 1
     });
 
     // --- Interaction Events (Mouse Parallax Only) ---
