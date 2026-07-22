@@ -310,29 +310,26 @@ body {
     box-shadow: 0 -20px 50px rgba(0,0,0,1); /* Dark shadow over the receding hero */
 }
 
-.s2-bg-img {
+.s2-gradient-overlay {
     position: absolute;
-    top: -5%;
-    left: -5%;
-    width: 110%;
-    height: 110%;
-    object-fit: cover;
-    opacity: 0.4;
-    transform: scale(1.1);
-    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+    z-index: 2;
 }
 
-.bg-text {
+.s2-bg-img {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 15vw;
-    color: transparent;
-    -webkit-text-stroke: 2px rgba(255, 204, 0, 0.4);
-    z-index: 2;
-    white-space: nowrap;
-    pointer-events: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0; /* GSAP will reveal this */
+    z-index: 1;
+    image-rendering: high-quality;
 }
 
 #section-2 .content {

@@ -132,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const s2Img = document.querySelector('.s2-bg-img');
     const s2Title = document.querySelector('.s2-title');
     const s2Para = document.querySelector('.s2-para');
-    const bgText = document.querySelector('.bg-text');
 
     // Fade image in
     gsap.to(s2Img, {
@@ -144,20 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
             scrub: 1
         }
     });
-
-    // Parallax background text
-    gsap.fromTo(bgText, 
-        { y: 100 },
-        { 
-            y: -150, 
-            scrollTrigger: {
-                trigger: '#section-2',
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1
-            }
-        }
-    );
 
     // Staggered Content Entry
     gsap.fromTo([s2Title, s2Para], 
@@ -175,27 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     );
-
-    // Mouse Parallax for Section 2
-    const section2 = document.getElementById('section-2');
-    section2.addEventListener('mousemove', (e) => {
-        const x = (e.clientX / window.innerWidth - 0.5) * 20;
-        const y = (e.clientY / window.innerHeight - 0.5) * 20;
-        
-        gsap.to(s2Img, {
-            x: -x * 2,
-            y: -y * 2,
-            duration: 1,
-            ease: "power2.out"
-        });
-        
-        gsap.to(bgText, {
-            x: x * 1.5,
-            y: y * 1.5,
-            duration: 1,
-            ease: "power2.out"
-        });
-    });
 
     window.addEventListener('resize', () => {
         canvas.width = container.clientWidth;
